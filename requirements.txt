@@ -5,5 +5,5 @@ pandas
 scikit-learn
 lightgbm
 supabase
-uvicorn
+gunicorn
 python-dotenv
