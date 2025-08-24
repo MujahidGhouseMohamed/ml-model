@@ -6,3 +6,4 @@ scikit-learn
 lightgbm
 supabase
 uvicorn
+python-dotenv
