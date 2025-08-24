@@ -1,0 +1,7 @@
+flask
+mysql-connector-python
+flask-bcrypt
+pandas
+scikit-learn
+lightgbm
+supabase
