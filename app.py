@@ -156,6 +156,32 @@ def predict():
         result_path = os.path.join(app.config["UPLOAD_FOLDER"], out_name)
         pred_df.to_csv(result_path, index=False)
         session["last_prediction_csv"] = out_name
+                # --- SAVE PREDICTIONS TO SUPABASE ---
+        try:
+            
+            # Keep only BlendProperty1–BlendProperty10
+            cols = [f"BlendProperty{i}" for i in range(1, 11)]
+            pred_df = pred_df[cols]
+
+                # Convert dataframe to records
+            records = pred_df.to_dict(orient="records")
+
+                # Insert into Supabase
+            response = supabase.table("predictions").insert(records).execute()
+
+            print("✅ Inserted into Supabase:", response)
+
+            
+
+
+
+            if response.data:
+                print(f"✅ Saved {len(response.data)} rows into Supabase 'predictions' table")
+            else:
+                print("⚠️ Inserted but no response data returned")
+        except Exception as e:
+            print(f"❌ Error inserting predictions into Supabase: {e}")
+
 
         table_html = pred_df.head(10).to_html(classes="table-auto border", index=False)
         return render_template_string(HTML_TEMPLATES['predict.html'], prediction_result=f"✅ Prediction done! {len(pred_df)} rows processed. <a href='/download'>📥 Download CSV</a><br><br>{table_html}")
